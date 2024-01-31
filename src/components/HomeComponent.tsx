@@ -19,9 +19,14 @@ export const HomeComponent: React.FC = () => {
   const Navigate = (left: boolean) => {
     const newScrollPosition = left ? scrollPosition - cardSize : scrollPosition + cardSize;
 
-    if (cardListRef.current && newScrollPosition >= 0 && newScrollPosition <= cardListRef.current.scrollWidth - (cardListRef.current.clientWidth || 0)) {
-      setScrollPosition(newScrollPosition);
-      cardListRef.current.scrollTo({ left: newScrollPosition });
+    if (cardListRef.current) {
+      // Arredonda a nova posição para garantir que a rolagem seja no tamanho exato do cartão
+      const roundedPosition = Math.round(newScrollPosition / cardSize) * cardSize;
+
+      if (roundedPosition >= 0 && roundedPosition <= cardListRef.current.scrollWidth - cardListRef.current.clientWidth) {
+        setScrollPosition(roundedPosition);
+        cardListRef.current.scrollTo({ left: roundedPosition });
+      }
     }
   }
 
